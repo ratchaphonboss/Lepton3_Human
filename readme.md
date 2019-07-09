@@ -1,14 +1,6 @@
-# Raspberry Pi Code
-
-
-## leptonic-vsync
-A version of Damien Walsh's [leptonic](https://github.com/themainframe/leptonic) server program for the Raspberry Pi that uses VSYNC and an ISR running in user-space on the Pi to sync the Lepton's VoSPI data.
-
-![leptonic_vsync](pictures/leptonic_vsync.png)
+# Raspberry Pi3 B+ Code
 
 ### Hardware
-
-![Pi Thermal Imaging Camera](pictures/pi_lepton.png)
 
 Connect the Lepton module's power, I2C, SPI and VSYNC output to the Pi as follows.  
 
@@ -24,40 +16,16 @@ Connect the Lepton module's power, I2C, SPI and VSYNC output to the Pi as follow
 | 23            | SCLK     | SCLK          |
 | 24            | CS0      | CS            |
 
-VSYNC can be found on the back of the Lepton module.
+sudo apt-get update
+sudo apt-get upgrade
 
-![VSYNC](pictures/gpio3.png)
+wget https://nodejs.org/dist/v8.9.0/node-v8.9.0-linux-armv6l.tar.gz
+tar -xzf node-v8.9.0-linux-armv6l.tar.gz
+cd node-v8.9.0-linux-armv6l/
+sudo cp -R * /usr/local/
+node -v
+npm -v
 
+wget https://download.opensuse.org/repositories/network:/messaging:/zeromq:/release-stable/Debian_9.0/Release.key -O- | sudo apt-key add
+sudo apt-get install libzmq3-dev
 
-### Software
-Download and install Damien's version of [leptonic](https://github.com/themainframe/leptonic) including the dependencies he lists.  In addition, install the [PIGPIO C library](http://abyz.me.uk/rpi/pigpio/) and enable I2C on your Pi if necessary using ```raspi-config```.  PIGPIO is used for low-latency user-space interrupt handling.  Download and unpack leptonic-vsync.
-
-```
-cd leptonic-vsync
-make
-sudo ./bin/leptonic /dev/i2c-1 /dev/spidev0.0
-
-```
-
-You should see the leptonic server start up with output like the following.
-
-```
-pi@raspberrypi:~/leptonic-vsync $ sudo ./bin/leptonic /dev/i2c-1 /dev/spidev0.0
-08:10:14 INFO  src/leptonic.c:223: preallocating space for segments...
-08:10:14 INFO  src/leptonic.c:232: Creating get_frames_from_device thread
-08:10:14 INFO  src/leptonic.c:238: Creating send_frames_to_socket thread
-08:10:14 INFO  src/leptonic.c:80: opening I2C device... /dev/i2c-1
-08:10:14 INFO  src/leptonic.c:87: opening SPI device... /dev/spidev0.0
-08:10:14 INFO  src/leptonic.c:106: aquiring VoSPI synchronisation
-```
-
-Then start the frontend code in the original leptonic frontend directory.
-
-```
-npm start
-```
-
-You should be able to view the output from the camera on a web browser using the Pi's address at port 3000 as with Damien's original code.
-
-#### AGC
-Uncomment out the call to ````cci_set_agc_enable_state```` in leptonic.c to enable AGC.  This results in a slightly better image utilizing the Lepton's built-in AGC functionality.
