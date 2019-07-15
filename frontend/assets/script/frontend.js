@@ -22,6 +22,11 @@
         var min = Math.min.apply(Math, intData);
         var range = max - min;
 
+        var tempMax = ((0.0217*max)-177.77+25.0+8.0).toFixed(2);
+	var tempMin = ((0.0217*min)-177.77+25.0+8.0).toFixed(2);
+		
+	if(tempMax > 0 && tempMax < 100 && tempMin > 0 && tempMin < 100)
+	{
         // Build some image data with the integers
         for (var c = 0; c < intData.length; c ++) {
           // Normalise each pixel value first
@@ -33,8 +38,8 @@
         }
 
         ctx.putImageData(imageData, 0, 0);
-        value.innerHTML = "MaxValue:" + max.toString()  + "MinValue" + min.toString();
-		temp.innerHTML = "MaxValue:" + max.toString()  + "MinValue" + min.toString();
+		temp.innerHTML = "อุณหภูมิสูงสุด:" + tempMax.toString()+"  "+ "อุณหภูมิต่ำสุด:" + tempMin.toString();
+		}
       });
 
   });
