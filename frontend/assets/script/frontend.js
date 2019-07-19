@@ -36,10 +36,14 @@
           imageData.data[(c * 4) + 1] = gradients.fusion[pixelValue][1];
           imageData.data[(c * 4) + 2] = gradients.fusion[pixelValue][2];
         }
-
+	  var iftemp = {
+		max: max,
+		min: min
+	  };
+	socket.emit('iftemp',iftemp);
         ctx.putImageData(imageData, 0, 0);
-		temp.innerHTML = "อุณหภูมิสูงสุด:" + tempMax.toString()+"  "+ "อุณหภูมิต่ำสุด:" + tempMin.toString();
-		}
+	temp.innerHTML = "อุณหภูมิสูงสุด:" + tempMax.toString()+"  "+ "อุณหภูมิต่ำสุด:" + tempMin.toString();
+	}
       });
 
   });
