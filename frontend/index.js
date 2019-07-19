@@ -6,6 +6,9 @@ const io = require('socket.io')(http);
 const zmq = require('zeromq');
 const pako = require('pako');
 const process = require('process');
+var Gpio = require('onoff').Gpio; //include onoff to interact with the GPIO
+var RED = new Gpio(20, 'out'); //use GPIO pin 4, and specify that it is output
+var GREEN = new Gpio(21, 'out'); //use GPIO pin 4, and specify that it is output
 
 // Define a requester
 let requester = zmq.socket('req');
@@ -19,10 +22,22 @@ requester.on('message', (data) => {
 });
 
   // When this user emits, client side: socket.emit('otherevent',some data);
-socket.on('iftemp',
+  socket.on('iftemp',
   function(iftemp) {
     // Data comes in as whatever was sent, including objects
     console.log("Received: 'iftemp' " + iftemp.min + " " + iftemp.max);
+  
+    if (iftemp.max >= 40) 
+    { 
+      RED.writeSync(1);
+      GREEN.writeSync(0);
+    } 
+    else 
+    {
+      GREEN.writeSync(1);
+      RED.writeSync(0);
+    }
+  
     // Send it to all other clients
     socket.broadcast.emit('iftemp', iftemp);
   }
