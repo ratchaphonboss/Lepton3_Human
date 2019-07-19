@@ -18,6 +18,17 @@ requester.on('message', (data) => {
   io.volatile.emit('frame', compressedData, {for: 'everyone'});
 });
 
+  // When this user emits, client side: socket.emit('otherevent',some data);
+socket.on('iftemp',
+  function(iftemp) {
+    // Data comes in as whatever was sent, including objects
+    console.log("Received: 'iftemp' " + iftemp.min + " " + iftemp.max);
+    // Send it to all other clients
+    socket.broadcast.emit('iftemp', iftemp);
+  }
+);
+
+
 // Request a single frame now
 setInterval(() => {
   requester.send('hello');
